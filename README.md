@@ -14,7 +14,7 @@ Install the packages with:
 I decided to remove my personal trained model from this repo to protect the privacy of people I have talked with that the bot likes to name-drop every now and then. To train and use your own model, perform the following steps:
 
 1. Download your discord messages using https://github.com/Tyrrrz/DiscordChatExporter. Select the channels you want to download and export as csv.
-2. Add your dataset folder path (the folder with all your .csv's) and your output file path to preprocessing.py. Run preprocessing.py.
+2. Add your dataset folder path (the folder with all your .csv's), your output file path, and your target discord username to preprocessing.py. Run preprocessing.py.
 3. Follow the instructions in https://colab.research.google.com/github/sarthakmalik/GPT2.Training.Google.Colaboratory/blob/master/Train_a_GPT_2_Text_Generating_Model_w_GPU.ipynb to train your model. Under "Uploading a Text File to be Trained to Colaboratory", upload the .txt output from preprocessing.py. Once GPT-2 is retrained, download it to your computer and put the finished model in the checkpoints folder.
 4. Do you have any emojis/images/links you send frequently? Put them in the corresponding emojis.txt, images.txt, and links.txt files. Emojis should be formatted like :emojiname:. Links to images should be put in images.txt, not actual images.
 5. Add your bot token and id to bot.py.
