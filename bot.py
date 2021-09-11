@@ -1,8 +1,10 @@
 import discord
 from discord.ext import commands, tasks
+from discord.voice_client import VoiceClient
 import gpt_2_simple as gpt2
 import tensorflow as tf
-import random
+import random, os, gtts, time
+from mutagen.mp3 import MP3
 
 
 TOKEN = # TOKEN
@@ -30,6 +32,44 @@ async def ping(ctx):
     print('PONG')
     await ctx.send(f'PONG! {round(client.latency * 1000)}ms')
 
+@client.command()
+async def join(ctx):
+    if not ctx.message.author.voice:
+        await ctx.send(f'{ctx.message.author.name} is not connected to a voice channel')
+        return
+    else:
+        channel = ctx.message.author.voice.channel
+    await channel.connect()
+    voice_client = ctx.message.guild.voice_client
+    audio_source = discord.FFmpegPCMAudio('join\\join' + str(random.randint(1,2)) + '.mp3')
+    if not voice_client.is_playing():
+        voice_client.play(audio_source, after=None)
+
+
+@client.command()
+async def leave(ctx):
+    voice_client = ctx.message.guild.voice_client
+    audio_source = discord.FFmpegPCMAudio('leave\\leave' + str(random.randint(1,2)) + '.mp3')
+    if not voice_client.is_playing():
+        voice_client.play(audio_source, after=None)
+    if voice_client and voice_client.is_connected():
+        time.sleep(2)
+        await voice_client.disconnect()
+    else:
+        await ctx.send(f'{client.user} is not connected to a voice channel.')
+
+@client.command()
+async def speak(ctx):
+    print(ctx.message.content)
+    tts = gtts.gTTS(text=ctx.message.content.replace('$speak', ''),lang='en',tld='com', slow=False)
+    tts.save('speak.mp3')
+    guild = ctx.guild
+    voice_client: discord.VoiceClient = discord.utils.get(client.voice_clients, guild=guild)
+    audio_source = discord.FFmpegPCMAudio('speak.mp3')
+    if not voice_client.is_playing():
+        voice_client.play(audio_source, after=None)
+
+    
 @client.event
 async def on_message(message):
     if client.user.mentioned_in(message):
